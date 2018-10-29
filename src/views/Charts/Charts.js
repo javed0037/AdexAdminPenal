@@ -1,275 +1,552 @@
 import React, { Component } from 'react';
-import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
-import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
+import { Bar, Line } from 'react-chartjs-2';
+import {
+  Badge,
+  Button,
+  ButtonDropdown,
+  ButtonGroup,
+  ButtonToolbar,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Col,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Progress,
+  Row,
+  Table,
+} from 'reactstrap';
+import Widget03 from '../../views/Widgets/Widget03'
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
+const brandPrimary = getStyle('--primary')
+const brandSuccess = getStyle('--success')
+const brandInfo = getStyle('--info')
+const brandWarning = getStyle('--warning')
+const brandDanger = getStyle('--danger')
 
-var  pie = {};
-const bar = {
-  labels: ['1', '2', '3', '4', '5', '6', '7','8','9','10','11','12','13','14','15','16','17','18','19','20','20','21','22','23','24','25','26','27','28','29','30'],
+// Card Chart 1
+const cardChartData1 = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
     {
       label: 'My First dataset',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      borderWidth: 2,
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: brandPrimary,
+      borderColor: 'rgba(255,255,255,.55)',
+      data: [65, 59, 84, 84, 51, 55, 40],
     },
   ],
 };
 
-const doughnut = {
-  labels: [
-    'Red',
-    'Green',
-    'Yellow',
-  ],
-  datasets: [
-    {
-      data: [300, 50, 100],
-      backgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-      hoverBackgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-    }],
-};
-
-const radar = {
-  labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      backgroundColor: 'rgba(179,181,198,0.2)',
-      borderColor: 'rgba(179,181,198,1)',
-      pointBackgroundColor: 'rgba(179,181,198,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(179,181,198,1)',
-      data: [65, 59, 90, 81, 56, 55, 40],
-    },
-    {
-      label: 'My Second dataset',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      pointBackgroundColor: 'rgba(255,99,132,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(255,99,132,1)',
-      data: [28, 48, 40, 19, 96, 27, 100],
-    },
-  ],
-};
-
-
-
-
-const polar = {
-  datasets: [
-    {
-      data: [
-        11,
-        16,
-        7,
-        3,
-        14,
-      ],
-      backgroundColor: [
-        '#FF6384',
-        '#4BC0C0',
-        '#FFCE56',
-        '#E7E9ED',
-        '#36A2EB',
-      ],
-      label: 'My dataset' // for legend
-    }],
-  labels: [
-    'Red',
-    'Green',
-    'Yellow',
-    'Grey',
-    'Blue',
-  ],
-};
-
-const options = {
+const cardChartOpts1 = {
   tooltips: {
     enabled: false,
     custom: CustomTooltips
   },
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          color: 'transparent',
+          zeroLineColor: 'transparent',
+        },
+        ticks: {
+          fontSize: 2,
+          fontColor: 'transparent',
+        },
+
+      }],
+    yAxes: [
+      {
+        display: false,
+        ticks: {
+          display: false,
+          min: Math.min.apply(Math, cardChartData1.datasets[0].data) - 5,
+          max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 5,
+        },
+      }],
+  },
+  elements: {
+    line: {
+      borderWidth: 1,
+    },
+    point: {
+      radius: 4,
+      hitRadius: 10,
+      hoverRadius: 4,
+    },
+  }
 }
+
+
+// Card Chart 2
+const cardChartData2 = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: brandInfo,
+      borderColor: 'rgba(255,255,255,.55)',
+      data: [1, 18, 9, 17, 34, 22, 11],
+    },
+  ],
+};
+
+const cardChartOpts2 = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          color: 'transparent',
+          zeroLineColor: 'transparent',
+        },
+        ticks: {
+          fontSize: 2,
+          fontColor: 'transparent',
+        },
+
+      }],
+    yAxes: [
+      {
+        display: false,
+        ticks: {
+          display: false,
+          min: Math.min.apply(Math, cardChartData2.datasets[0].data) - 5,
+          max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 5,
+        },
+      }],
+  },
+  elements: {
+    line: {
+      tension: 0.00001,
+      borderWidth: 1,
+    },
+    point: {
+      radius: 4,
+      hitRadius: 10,
+      hoverRadius: 4,
+    },
+  },
+};
+
+// Card Chart 3
+const cardChartData3 = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: 'rgba(255,255,255,.2)',
+      borderColor: 'rgba(255,255,255,.55)',
+      data: [78, 81, 80, 45, 34, 12, 40],
+    },
+  ],
+};
+
+const cardChartOpts3 = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        display: false,
+      }],
+    yAxes: [
+      {
+        display: false,
+      }],
+  },
+  elements: {
+    line: {
+      borderWidth: 2,
+    },
+    point: {
+      radius: 0,
+      hitRadius: 10,
+      hoverRadius: 4,
+    },
+  },
+};
+
+// Card Chart 4
+const cardChartData4 = {
+  labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: 'rgba(255,255,255,.3)',
+      borderColor: 'transparent',
+      data: [78, 81, 80, 45, 34, 12, 40, 75, 34, 89, 32, 68, 54, 72, 18, 98],
+    },
+  ],
+};
+
+const cardChartOpts4 = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        display: false,
+        barPercentage: 0.6,
+      }],
+    yAxes: [
+      {
+        display: false,
+      }],
+  },
+};
+
+// Social Box Chart
+const socialBoxData = [
+  { data: [65, 59, 84, 84, 51, 55, 40], label: 'facebook' },
+  { data: [1, 13, 9, 17, 34, 41, 38], label: 'twitter' },
+  { data: [78, 81, 80, 45, 34, 12, 40], label: 'linkedin' },
+  { data: [35, 23, 56, 22, 97, 23, 64], label: 'google' },
+];
+
+const makeSocialBoxData = (dataSetNo) => {
+  const dataset = socialBoxData[dataSetNo];
+  const data = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        backgroundColor: 'rgba(255,255,255,.1)',
+        borderColor: 'rgba(255,255,255,.55)',
+        pointHoverBackgroundColor: '#fff',
+        borderWidth: 2,
+        data: dataset.data,
+        label: dataset.label,
+      },
+    ],
+  };
+  return () => data;
+};
+
+const socialChartOpts = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        display: false,
+      }],
+    yAxes: [
+      {
+        display: false,
+      }],
+  },
+  elements: {
+    point: {
+      radius: 0,
+      hitRadius: 10,
+      hoverRadius: 4,
+      hoverBorderWidth: 3,
+    },
+  },
+};
+
+// sparkline charts
+const sparkLineChartData = [
+  {
+    data: [35, 23, 56, 22, 97, 23, 64],
+    label: 'New Clients',
+  },
+  {
+    data: [65, 59, 84, 84, 51, 55, 40],
+    label: 'Recurring Clients',
+  },
+  {
+    data: [35, 23, 56, 22, 97, 23, 64],
+    label: 'Pageviews',
+  },
+  {
+    data: [65, 59, 84, 84, 51, 55, 40],
+    label: 'Organic',
+  },
+  {
+    data: [78, 81, 80, 45, 34, 12, 40],
+    label: 'CTR',
+  },
+  {
+    data: [1, 13, 9, 17, 34, 41, 38],
+    label: 'Bounce Rate',
+  },
+];
+
+const makeSparkLineData = (dataSetNo, variant) => {
+  const dataset = sparkLineChartData[dataSetNo];
+  const data = {
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    datasets: [
+      {
+        backgroundColor: 'transparent',
+        borderColor: variant ? variant : '#c2cfd6',
+        data: dataset.data,
+        label: dataset.label,
+      },
+    ],
+  };
+  return () => data;
+};
+
+const sparklineChartOpts = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  responsive: true,
+  maintainAspectRatio: true,
+  scales: {
+    xAxes: [
+      {
+        display: false,
+      }],
+    yAxes: [
+      {
+        display: false,
+      }],
+  },
+  elements: {
+    line: {
+      borderWidth: 2,
+    },
+    point: {
+      radius: 0,
+      hitRadius: 10,
+      hoverRadius: 4,
+      hoverBorderWidth: 3,
+    },
+  },
+  legend: {
+    display: false,
+  },
+};
+
+// Main Chart
+
+//Random Numbers
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+var elements = 27;
+var data1 = [];
+var data2 = [];
+var data3 = [];
+
+for (var i = 0; i <= elements; i++) {
+  data1.push(random(50, 200));
+  data2.push(random(80, 100));
+  data3.push(65);
+}
+
+const mainChart = {
+  labels: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: hexToRgba(brandInfo, 10),
+      borderColor: brandInfo,
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 2,
+      data: data1,
+    },
+    {
+      label: 'My Second dataset',
+      backgroundColor: 'transparent',
+      borderColor: brandSuccess,
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 2,
+      data: data2,
+    },
+    {
+      label: 'My Third dataset',
+      backgroundColor: 'transparent',
+      borderColor: brandDanger,
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 1,
+      borderDash: [8, 5],
+      data: data3,
+    },
+  ],
+};
+
+const mainChartOpts = {
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips,
+    intersect: true,
+    mode: 'index',
+    position: 'nearest',
+    callbacks: {
+      labelColor: function(tooltipItem, chart) {
+        return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor }
+      }
+    }
+  },
+  maintainAspectRatio: false,
+  legend: {
+    display: false,
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          drawOnChartArea: false,
+        },
+      }],
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+          maxTicksLimit: 5,
+          stepSize: Math.ceil(250 / 5),
+          max: 250,
+        },
+      }],
+  },
+  elements: {
+    point: {
+      radius: 0,
+      hitRadius: 10,
+      hoverRadius: 4,
+      hoverBorderWidth: 3,
+    },
+  },
+};
 
 class Charts extends Component {
   constructor(props) {
     super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+
     this.state = {
-      allUser : '',
-      activeUser : 0,
-      Inactive :  0 ,
-      pieInAct:{}
+      dropdownOpen: false,
+      radioSelected: 2,
     };
   }
-  componentDidMount() {
-    this.userlist();
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen,
+    });
   }
-  getpai = ()=>{
 
-    var acti = this.state.activeUser;
-    var inac = this.state.Inactive;
-    console.log(inac,"----------------",acti)
-    pie = {
-      datasets: [
-        {
-          data: [acti, inac],
-          backgroundColor: [
-            '#FF6384',
-            '#000099',
-            '#FFCE56',
-          ],
-          hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-          ],
-        }],
-    };
-
-  }
-  userlist = () => {
-    var formthis = this;
-    var object = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-       // 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt') + ''
-      }
-    }
-
-    var apiUrl = "";
-    apiUrl   =  'http://localhost:5000/user/getallUser'
-    fetch(apiUrl, object)
-      .then(res => res.json())
-      .then(json => {
-        console.log("there are the json ",json)
-        if (json.data.length > 0) {
-          var total_count = json.data.length;
-            console.log("total_count---------------",total_count);
-            var result = json.data.filter(obj => {
-              return obj.status === 1
-            })
-            var result1 = json.data.filter(obj => {
-              return obj.status !== 1
-            })
-          var   total_count1 = result.length;
-          var   total_count2 = result1.length;
-            console.log('total_count1 .......',total_count1);
-            console.log('total_Inactive .......',total_count2);
-
-
-            this.setState({allUser: total_count});
-            this.setState({activeUser: total_count1});
-            this.setState({Inactive: total_count2},()=>{
-              //formthis.getpai();
-            });
-
-:            formthis.setState({ pieInAct = {
-              datasets: [
-                {
-                  data: [acti, inac],
-                  backgroundColor: [
-                    '#FF6384',
-                    '#000099',
-                    '#FFCE56',
-                  ],
-                  hoverBackgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                  ],
-                }],
-            }});
-
-
-
-
-        }
-        else {
-          this.setState({
-            allUser: 0
-          })
-        }
-      }).catch(error => {
-        console.log("error-->>", error)
-      });
+  onRadioBtnClick(radioSelected) {
+    this.setState({
+      radioSelected: radioSelected,
+    });
   }
 
   render() {
+
     return (
       <div className="animated fadeIn">
-
-        <CardColumns className="cols-2">
-          <Card>
-
-            <CardHeader>
-              All User
-              <div className="card-header-actions">
-
+        <Row>
+          <Col xs="12" sm="6" lg="5">
+            <Card className="text-white bg-info">
+              <CardBody className="pb-0">
+                
+             <div className="chart-wrapper">
+              <h4><strong>{this.state.allUser}</strong></h4>
+              <br/>
+              <h4><strong><a href =  '/#/theme/typography'> All users</a> </strong></h4>
               </div>
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
+              </CardBody>
+              <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
+                
+              </div>
+            </Card>
+          </Col>
+
+          <Col xs="12" sm="6" lg="5">
+            <Card className="text-white bg-info">
+              <CardBody className="pb-0">
+                
+                <div className="chart-wrapper">
               <h4 color = 'red'><strong>{this.state.allUser}</strong></h4>
               <br/>
               <h4><strong><a href =  '/#/theme/typography'> All users</a> </strong></h4>
               </div>
+              </CardBody>
+              <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
+                
+              </div>
+            </Card>
+          </Col>
 
-            </CardBody>
-            <br/><br/><br/>
-            <CardHeader>
-              changes
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-             User
-              <div className="card-header-actions">
+          <Col xs="12" sm="6" lg="5">
+            <Card className="text-white bg-info">
+              <CardBody className="pb-0">
+                
+                <div className="chart-wrapper">
+              <h4 color = 'red'><strong>{this.state.allUser}</strong></h4>
+              <br/>
+              <h4><strong><a href =  '/#/theme/typography'> All users</a> </strong></h4>
+              </div>
+              </CardBody>
+              <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
+                
+              </div>
+            </Card>
+          </Col>
 
-                  <small className="text-muted">docs</small>
-
+          
+          <Col xs="12" sm="6" lg="5">
+            <Card className="text-white bg-info">
+              <CardBody className="pb-0">
+                
+                <div className="chart-wrapper">
+              <h4 color = 'red'><strong>{this.state.allUser}</strong></h4>
+              <br/>
+              <h4><strong><a href =  '/#/theme/typography'> All users</a> </strong></h4>
               </div>
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-              {console.log("paiiiii",pie)}
-                <Pie data={this.state.pieInAct} />
+              </CardBody>
+              <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
+                
               </div>
-            </CardBody>
-          </Card>
-        </CardColumns>
-        <CardColumns className="cols-2"></CardColumns>
-        <Card>
-            <CardHeader>
-              User Registration in last month
-              <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <div className="chart-wrapper">
-                <Bar data={bar} options={options} />
-              </div>
-            </CardBody>
-          </Card>
+            </Card>
+          </Col>
+        </Row>
+        
       </div>
     );
   }

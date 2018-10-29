@@ -71,9 +71,9 @@ class Colors extends Component {
           </div>
           <div className="card-body">
             <Row>
-              <ThemeColor className="bg-primary">
+             
                 <h6>Brand Primary Color</h6>
-              </ThemeColor>
+             
               <ThemeColor className="bg-secondary">
                 <h6>Brand Secondary Color</h6>
               </ThemeColor>

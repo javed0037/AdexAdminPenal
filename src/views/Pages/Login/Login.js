@@ -11,7 +11,7 @@ class Login extends Component {
     sessionStorage.clear(); 
 
     this.state = {
-      usernameOrEmail: '',
+      username: '',
       password: ''
     }
 
@@ -20,29 +20,38 @@ class Login extends Component {
   onSubmit = (e) =>{    
     e.preventDefault();
  
-    var txtusername=this.state.usernameOrEmail;
-    var txtpassword=this.state.password;
+    var userId   =   this.state.username;
+    var password =   this.state.password;
 
-    if(txtusername!="" && txtpassword!="")
+    if(userId!="" && password!= "")
     {
-      var getusersobj={ 
+      var getAdmin={ 
+
         method: 'POST',
+
         headers: new Headers({
+
           'Content-Type': 'application/json'                 
+       
         }),
+
         body: JSON.stringify({
-          "username" :txtusername,
-          "password" :txtpassword
+          "username" :userId,
+          "password" :password
         })
       }    
 
       var api_url=`${config.API_URL}`;
-         console.log(api_url,"api url",getusersobj,'threr arew getuser')
-      fetch(api_url+'/auth/signin', getusersobj)
-        .then(function(response){
+      console.log("there are the Request params",getAdmin.body)
+
+      fetch(api_url+'/adminLogin', getAdmin)
+         
+         .then(function(response){
+          
+
           if(response.status!=200)
           {
-          console.log("three are rewq param",getusersobj.body)
+
             swal({
               title: "Wrong!",
               text: "Somthing went wrong.",
@@ -51,14 +60,16 @@ class Login extends Component {
           }
           
           response.json().then(json=>{
-              if(json.status==true)
+
+              if(json.code == 1)
               {
+
                 sessionStorage.clear(); 
-                sessionStorage.setItem("username",txtusername);
-                sessionStorage.setItem("jwt",json.accessToken);
-                sessionStorage.setItem("user_id",json.id);
-                sessionStorage.setItem("typeid",json.typeid);
-                window.location.href = '/login';
+                sessionStorage.setItem("username",json.data.username);
+                sessionStorage.setItem("jwt",json.token);
+    
+
+                 window.location.href = '/login';
               }
               else
               {
@@ -107,7 +118,7 @@ class Login extends Component {
                 <Card className="p-4">
                   <CardBody>
                     <Form onSubmit={this.onSubmit}> 
-                      <h1 md="6">CHATAPP</h1>
+                      <h1 md="6">Add To Wallet</h1>
                       <p className="text-muted">Sign In to Dashboard</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
@@ -115,9 +126,9 @@ class Login extends Component {
                             <i className="icon-user"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input type="text" placeholder="Username" autoComplete="username" 
-                        name="usernameOrEmail"
-                        value={this.state.usernameOrEmail}
+                        <Input type="text" placeholder="username" autoComplete="username" 
+                        name="username"
+                        value={this.state.username}
                         onChange={this.onChange} />
                       </InputGroup>
                       <InputGroup className="mb-4">
@@ -137,7 +148,7 @@ class Login extends Component {
                           <Button color="primary" className="px-4">Login</Button>
                         </Col>
                         <Col xs="6" className="text-right hidden">
-                          <Button color="link" className="px-0">Forgot password?</Button>
+  
                         </Col>
                       </Row>
                     </Form>

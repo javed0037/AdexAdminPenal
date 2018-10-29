@@ -203,7 +203,7 @@ class VendorList extends Component {
                 <Table responsive striped>
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th>mobileno</th>
                       <th>User Id</th>  
                       <th>Status</th>
                       <th>Status</th>
