@@ -1,6 +1,6 @@
 var config= {
   
-    API_URL:"http://139.162.218.18:3002/api/v1/admin",
+    API_URL:"http://localhost:3002/api/v1/admin",
     HOST_URL:"http://localhost:3000"
   
   }
