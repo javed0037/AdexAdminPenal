@@ -224,7 +224,7 @@ const routes = [
   { path: '/theme/typography', name: 'Typography', component: Typography },
   { path: '/Details/:ids', name: 'Details', component: Details },
   { path: '/EditProfile/:ids', name: 'EditProfile', component: EditProfile },
-  { path: '/AddUser', name: 'AddUser', component: AddUser },
+  { path: '/AddUser/:mobile', name: 'AddUser', component: AddUser },
   { path: '/theme/Privacypolicy', name: 'Privacypolicy', component: Privacypolicy },
   { path: '/theme/Support', name: 'Support', component: Support },
   { path: '/theme/TermAndConditions', name: 'TermAndConditions', component: TermAndConditions },

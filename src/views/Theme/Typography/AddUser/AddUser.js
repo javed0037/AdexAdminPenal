@@ -1,193 +1,248 @@
 import React, { Component } from 'react';
-import { Alert, Card, CardBody, CardHeader,Form,CardFooter, Col, Row,FormGroup,Button,
-  Input,Label } from 'reactstrap';
-  import Select from 'react-select';
-  import swal from 'sweetalert';
-  var r = '';
+import { Input, Badge, Card, CardBody, CardHeader, Col, Row, Table,  FormGroup,
+Label } from 'reactstrap';
+import config from '../../../../config';
+import dateFormat from 'dateformat';
+import { NavLink } from 'react-router-dom';
+import Select from 'react-select';
+import {
+  NavLink as BSNavLink,
+  Button
+} from 'reactstrap';
+import swal from 'sweetalert';
+// import {displaytotalrows,previousPage,nextPage,arry_data,OnClickPage,displaytotalpage,
+//   PagingCurrent,PagingNext,PagingPrevious} from '../../../Controllers/Paging';
+
+import ReactPaginate from 'react-paginate';
+//import { PAGELIMIT } from '../../../Controllers/Comman';
 class AddUser extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      Status2 : 3,
-      status : '',
-      name : '',
-      email : '',
-      phone : '',
-      password : '',
-      pinid : '',
-      random1 :'',
-      Status1  : [{label : 'Select Status' , value : 'Select Statu'},{label : 'Active',value : 'Active'},{label : 'Inactive', value  :'Inactive'}],
-      visible: true
-    };
-    this.onDismiss = this.onDismiss.bind(this);
-  }
-
-  onDismiss() {
-    this.setState({ visible: false });
-  }
-
-  myFunction1=(e)=>{
-    e.preventDefault();
-   var r = Math.random().toString(36).substring(7);
-     this.setState({random1:r})
-   console.log('there are r-0---------',r);
-   
-  }
-  onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-    this.setState({ [e.target.email]: e.target.value });
-    this.setState({ [e.target.password]: e.target.value });
-    this.setState({ [e.target.phone]: e.target.value });
-    this.setState({ [e.target.pinid]: e.target.value });
-  }
-  handleChange = (e) => {
-    console.log("XXXXXXX--------@@@@@@@@@@@@@@@ ", e)
-    var val1=(e.value=="Active")?1:0;
-    this.setState({ Status2: val1 });
-  }
-  // getString = (e){
-
-  // }
-  onSubmit = (e) => {
-    e.preventDefault();
-    console.log('there are the state=>', this.state)
-    var parameter = this.props.match.params.ids;
-    var user_ids = (parameter) ? parameter : 0; 
-    var email = (this.state.email) ? this.state.email.toString() : "";
-    var password = (this.state.password) ? this.state.password.toString() : "";
-    var name = (this.state.name) ? this.state.name.toString() :    "";
-    var phone = (this.state.phone) ? this.state.phone.toString() : "";
-    var unique_key = (this.state.random1) ? this.state.random1.toString() : "";
-    var Status1 = (this.state.Status2);
-   
-    var args1 = {
-      "email": email,
-      "username":  name,
-      "phone" : phone,
-      "password" : password,
-      "status" : Status1,
-      "unique_key" :  unique_key
+      products: [],
+      offset: 0,
+      pageno: 1,
+      pageCount: 0
     };
 
-    var swaltitle = (user_ids == 0) ? "SAVE" : "UPDATE";
-    var swaltext = (user_ids == 0) ? "Successfully save" : "Successfully update";
+  }
 
-    var object1 = {
+  componentDidMount() {
+    this.listTransaction();
+
+  }
+
+  handlePageClick = (data) => {
+    let selected = data.selected;
+    let pno = selected + 1;
+    this.setState(
+      { pageno: pno },
+      () => {
+        this.listTransaction();
+      }
+    );
+  };
+
+// var parameter = this.props.match.params.ids;
+  listTransaction = () => {
+    var object = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        //'Authorization': 'Bearer ' + sessionStorage.getItem('jwt') + ''
       },
-      body: JSON.stringify(args1)
+      body: JSON.stringify({
+        "mobile" :"p.mobile",
+         
+      })
     }
-    var api_url = '';
-    api_url = 'http://localhost:5000/addNewuser';
-   
-    fetch(api_url, object1)
-      .then(function (response) {
-        console.log('there are the response',response);
-        
-        response.json().then(json => {
-          console.log('there are the json---------', json.status,"jsonnnnn",json)
-          if (json.status == '200'){
-            swal({
-              title: swaltitle,
-              text:  json.message,
-              icon:  "success",
-            });
-            window.location.href = '/#/theme/typography';
-          }
-          else {
-            console.log("this is going on the way")
-            swal({
-              title: "Warning",
-              text: json.message,
-              icon: "warning",
-            });
-          }
-        })
+    // var parameter = this.props.match.params.ids;
+    
+    // var user_ids = (parameter) ? parameter : 0;
+    // var pageno = this.state.pageno;
+    var api_url = `${config.API_URL}`;
 
+    var apiUrl = "/getUserTransactions";
 
+    fetch(api_url+apiUrl, object)
+      .then(res => res.json())
+      .then(json => {
+        if (json["data"].length > 0) {
+          var total_count = json["totalElements"];
+          this.setState({
+            products: json["data"],
+           // pageCount: Math.ceil(total_count / PAGELIMIT)
+          });
+        }
+        else {
+          this.setState({
+            products: [],
+            pageCount: 0
+          })
+        }
       }).catch(error => {
-        console.log(error.toString());
-        // swal({
-        //   title: "Wrong!",
-        //   text: error.toString(),
-        //   icon: "error",
-        // });
+        console.log("error-->>", error)
       });
   }
 
+  statusupdate = (p, dt) => {
+    //e.preventDefault(); // <--- prevent form from submitting
+    console.log(p.status, "this is status@@@@@@@")
+    var currentform = this;
+    var currentstatus = (dt) ? dt : ((p.isDelete === 1) ? 2 : 1);
+    var currentstatusname = (dt) ? "delete" : ((p.status === 1) ? "inactive" : "active");
+    var currentStatusTitle = (dt) ? "Delete" : ((p.status === 1) ? "Inactive" : "Active");
+
+    swal({
+      title: "Are you sure?",
+      text: "You want to " + currentstatusname + " '" + p.email + "'!",
+      icon: "warning",
+      buttons: [
+        'No, cancel it!',
+        'Yes, I am sure!'
+      ],
+      dangerMode: true,
+    }).then(function (isConfirm) {
+      if (isConfirm) {
+        swal({
+          title: currentStatusTitle + "!",
+          text: 'Vendor ' + p.email + ' is successfully ' + currentstatusname + '!',
+          icon: 'success'
+        }).then(function () {
+          
+          p.status = currentstatus;
+         
+          console.log(p, "there are the req param")
+
+          ///////////////////////////
+          var object = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + sessionStorage.getItem('jwt') + ''
+            },
+            body: JSON.stringify(p)
+          }
+          var api_url = `${config.API_URL}`;
+          fetch(api_url + '/superadmin/updateVendor', object)
+            .then(res => res.json())
+            .then(json => {
+              currentform.listTransaction();
+            }).catch(error => {
+
+            });
+        });
+      } else {
+        swal("Cancelled", "It is cancelled.", "error");
+      }
+    })
+  };
+
+  onSearch = (e) => {
+    this.setState(
+      { [e.target.name]: e.target.value },
+      () => {
+        this.listTransaction();
+      }
+    );
+  }
+
   render() {
-    const { selectedOption1 } = this.state;
-    // var test = { "label": this.state.Status1 };
-     var test1 = (this.state.Status2 === 1)?'Active' :'Inactive';
-       console.log('test1=',test1,"Status2=",this.state.Status2)
+    const formthis = this;
     return (
       <div className="animated fadeIn">
-     <Form onSubmit={this.onSubmit}>
-      <Card>
-      <CardBody>
+      <h4>CHAT WALLPAPER LIST</h4>
         <Row>
-          <Col xs="12" md="12"> 
+          <Col xs="12" lg="12">
             <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Add New User</strong>   
-                  </CardHeader>
-                   <CardBody>
-                   <FormGroup>
+              
+              <CardBody>
                 
-                  <h4 className="alert-heading">Name</h4>
-                    <Input type="text" id="name" name="name" onChange={this.onChange}  value={this.state.name} placeholder="Enter name number " />
-                    </FormGroup>   
-                    <FormGroup>    
-                   <h4 className="alert-heading">Email</h4>
-                    
-                   <Input type="email" id="email" name="email" value={this.state.email}  onChange={this.onChange} placeholder="Enter email" />
-                   
-                   </FormGroup>   
-                    <FormGroup>    
-                   <h4 className="alert-heading">phone</h4>
-                    
-                   <Input type="tel" id="phone" name="phone" value={this.state.phone} onChange={this.onChange} placeholder="Enter phone" />
-                   
-                   </FormGroup>   
-                    <FormGroup>   
-                   <h4 className="alert-heading">Password</h4>
-                  
-                    <Input type="password" id="password" name="password" value={this.state.password} onChange={this.onChange} placeholder="Enter password" />
-                   
-                    </FormGroup>   
-                    <FormGroup>  
-                    <h4 className="alert-heading">Secure Pin id</h4>
-                    
-                    <Input type="text" id= "pinid" name= "pinid" value={this.state.random1} onChange={this.getString} placeholder="Enter enter the pin Id" />
-                     <br/>
-                     <button onClick={this.myFunction1}>Generate Key</button>
-                    </FormGroup>   
-                     
-                    <FormGroup> 
-                <Label htmlFor="status">Status</Label> 
-                        <Select className="dropdown-width"
-                          name="form-field-name"
-                          value={{label : test1,value : test1}}
-                          onChange={this.handleChange}
-                          options={this.state.Status1}
-                        />
-                  </FormGroup> 
+                <Table responsive striped>
+                  <thead>
+                    <tr>
+                      <th>S.No</th>
+                      <th>Color Code</th>
+                      <th>Color Box</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      this.state.products.map(function (p, index, ) {
+                        return (
+                          <tr>
+                            <td>{p.id}</td>
+                            
+                          
+                            <td>
+                             
+                             <Badge className="pointer" onClick={() => formthis.statusupdate(p)} color={(p.status == 1) ? "success" : "secondary"}>{(p.status == 1) ? "Active" : "Inactive"}</Badge>
+
+                           </td>
+                            <td>
+                              <BSNavLink
+                                className="text-uppercase"
+                                tag={NavLink}
+                                to={'/vendor/VendorEmployeeList/' + p.userid}
+                                activeClassName="active"
+                                exact="true">
+                                <i class="icon-eye icons font-1xl d-block mt-0"></i>
+                              </BSNavLink>
+                            </td>
+                            <td>
+                              <BSNavLink
+                                className="text-uppercase"
+                                tag={NavLink}
+                                to={'/vendor/updatevendor/' + p.userid}
+                                activeClassName="active"
+                                exact="true">
+                                <i class="cui-note icons font-1xl d-block mt-0"></i>
+                              </BSNavLink>
+                            </td>
+
+
+                            <td>
+                              <Badge className="pointer1" onClick={() => formthis.statusupdate(p, 3)}><i class="fa fa-trash" aria-hidden="true"></i></Badge>
+
+
+                            </td>
+
+
+                          </tr>
+                        )
+                      })
+                    }
+
+                  </tbody>
+                </Table>
+                <ReactPaginate previousLabel={"previous"}
+                  nextLabel={"next"}
+                  breakLabel={<a href="">...</a>}
+                  breakClassName={"break-me"}
+                  pageCount={this.state.pageCount}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={this.handlePageClick}
+                  containerClassName={"pagination"}
+                  subContainerClassName={"pages page-item"}
+                  activeClassName={"active"}
+                  pageClassName={"page-item"}
+                  pageLinkClassName={"page-link"}
+                  previousLinkClassName={"page-link"}
+                  nextLinkClassName={"page-link"}
+                />
               </CardBody>
             </Card>
           </Col>
         </Row>
-        </CardBody>
-        <CardFooter>
-        <Button type="submit" size="sm" color="primary">Submit</Button>
-        </CardFooter>
-        </Card>
-      </Form>
       </div>
+
     );
   }
 }
+
 
 export default AddUser;

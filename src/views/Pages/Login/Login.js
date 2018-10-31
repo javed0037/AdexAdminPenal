@@ -61,7 +61,7 @@ class Login extends Component {
           
           response.json().then(json=>{
 
-              if(json.code == 1)
+              if(json.code == 0)
               {
 
                 sessionStorage.clear(); 

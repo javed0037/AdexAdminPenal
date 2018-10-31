@@ -48,7 +48,7 @@ class VendorList extends Component {
     var smobileno = (this.state.smobileno) ? this.state.smobileno : "";
     var saddress = (this.state.saddress) ? this.state.saddress : "";
     var object = {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
        // 'Authorization': 'Bearer ' + sessionStorage.getItem('jwt') + ''
@@ -56,31 +56,32 @@ class VendorList extends Component {
     }
     //var parameter = this.props.match.params.ids;
     //var user_ids = (parameter) ? parameter : 0;
-    var pageno = this.state.pageno;
-   // var api_url = `${config.API_URL}`;
+   // var pageno = this.state.pageno;
+    var api_url = `${config.API_URL}`;
 
-    var apiUrl = "";
-    apiUrl   =  'http://localhost:5000/getUserWithPagination?npp='+PAGELIMIT+'&page='+pageno
+     var apiUrl = "/getAllUserForAdmin";
+   // apiUrl   =  'http://localhost:5000/getUserWithPagination?npp='+PAGELIMIT+'&page='+pageno
     //apiUrl = api_url + "/superadmin/getAllVendors?page=" + pageno + "&limit=" + PAGELIMIT + "&name=" + susername + "&mobileno=" + smobileno + "&address=" + saddress + "";
-    console.log(PAGELIMIT,'PAGELIMIT');
+    //console.log(PAGELIMIT,'PAGELIMIT');
     
-    fetch(apiUrl, object)
+    fetch(api_url+apiUrl, object)
       .then(res => res.json())
       .then(json => {
-        if (json.results.length > 0) {
+
+        if (json.data.length > 0) {
           var total_count = json["totalpages"];
-          console.log("total_counttotal_count---------------", Math.ceil(total_count / PAGELIMIT));
           
           this.setState({
-            products: json.results,
-            pageCount: Math.ceil(total_count / PAGELIMIT)
+            products: json.data,
+            //pageCount: Math.ceil(total_count / PAGELIMIT)
           });
 
         }
         else {
           this.setState({
             products: [],
-            pageCount: 0
+            mobile : '',
+            //pageCount: 0
           })
         }
       }).catch(error => {
@@ -93,9 +94,9 @@ class VendorList extends Component {
     //e.preventDefault(); // <--- prevent form from submitting
     console.log(p.status, "this is status@@@@@@@")
     var currentform = this;
-    var currentstatus = (dt) ? dt : ((p.status === 1) ? 2 : 1);
-    var currentstatusname = (dt) ? "delete" : ((p.status === 1) ? "inactive" : "active");
-    var currentStatusTitle = (dt) ? "Delete" : ((p.status === 1) ? "Inactive" : "Active");
+    var currentstatus = (dt) ? dt : ((p.isDeleted === false) ? 2 : 1);
+    var currentstatusname = (dt) ? "delete" : ((p.isDeleted === false) ? "inactive" : "active");
+    var currentStatusTitle = (dt) ? "Delete" : ((p.isDeleted === false) ? "Inactive" : "Active");
 
     swal({
       title: "Are you sure?",
@@ -122,13 +123,20 @@ class VendorList extends Component {
               'Content-Type': 'application/json',
               //'Authorization': 'Bearer ' + sessionStorage.getItem('jwt') + ''
             },
+            body: JSON.stringify({
+              "mobile" :p.mobile,
+              
+            })
           }
 
-          var api_url = 'http://localhost:5000/user/deleteUser?userid='+p.userid;
-
-          fetch(api_url, object)
+          var api_url = `${config.API_URL}`;
+          var apiUrl = "/disableUser";
+           /*apiUrl   =  'http://localhost:5000/getUserWithPagination?npp='+PAGELIMIT+'&page='+pageno
+            apiUrl = api_url + "/superadmin/getAllVendors?page=" + pageno + "&limit=" + PAGELIMIT + "&name=" + susername + "&mobileno=" + smobileno + "&address=" + saddress + "";
+            console.log(PAGELIMIT,'PAGELIMIT');*/
+         
+         fetch(api_url+apiUrl, object)
             .then(res => res.json())
-
             .then(json => {
               currentform.userlist();
             }).catch(error => {
@@ -196,20 +204,23 @@ class VendorList extends Component {
                   <Col xs="10" lg="10">
                 <p><strong>User</strong></p>
                 </Col>
-                <Col xs="2" lg="2">
-                <h4><a href= "/#/AddUser"> <Button type="submit" size="sm" color="primary"><i className="fa fa-plus"></i> Add User</Button></a></h4>
-                </Col>
                 </Row>
                 <Table responsive striped>
                   <thead>
                     <tr>
-                      <th>mobileno</th>
-                      <th>User Id</th>  
+
+                      <th>mobile</th>
+                      <th>email</th>  
+                      <th>activeuser</th>
+                     
+                      <th>userbalance</th>
+                      <th>withdrawamount</th>
+                      <th>spinpoint</th>
+                      <th>scratchpoint</th>
+                      <th>videopoint</th>
                       <th>Status</th>
-                      <th>Status</th>
-                      <th>View</th>
-                      <th>Edit</th>
-                      <th>Delete</th>
+                     
+                      <th>Transaction</th>
 
                     </tr>
                   </thead>
@@ -218,48 +229,32 @@ class VendorList extends Component {
                       this.state.products.map(function (p, index, ) {
                         return (
                           <tr>
-                            <td>{p.id}</td>
-                            <td>{p.userid}</td>
-                            <td>
-                             
-                            <input
-                                  type="radio"
-                                  value="medium"
-                                 checked={p.status == 1}    
-                                 
-                                  />
+                            <td>{p.mobile}</td>
+                            <td>{p.email}</td>
+                            <td>{p.balance}</td>
+                           
+                           <td>{p.balance}</td>
+                           <td>{p.withdrawal_amount}</td>
+                           <td>{p.otp}</td>
+                           <td>{p.max_amount_for_jackpot}</td>
+                           
+                           <td>{p.otp}</td>
+                           <td>                                                                
+                          <Badge className="pointer" onClick={()=>formthis.statusupdate(p)} color={(p.isDeleted== false)?"success":"secondary"}>{(p.isDeleted==false)?"Active":"Inactive"}</Badge>    
+                   
+                          </td>
+                           
 
-                            </td>
-                            <td>
-                             
-                             <Badge className="pointer" color={(p.status == 1) ? "success" :"danger"}>{(p.status == 1) ? "Active" : "Inactive"}</Badge>
-                           </td>
-                            <td>
+                        
+                        <td>
                               <BSNavLink
                                 className="text-uppercase"
                                 tag={NavLink}
-                                to={'/Details/' +p.userid}
-                                activeClassName="active"
-                                exact="true">
-                                <i class="icon-eye icons font-1xl d-block mt-0"></i>
-                              </BSNavLink>
-                            </td>
-                            <td>
-                              <BSNavLink
-                                className="text-uppercase"
-                                tag={NavLink}
-                                to={'/EditProfile/' + p.userid}
+                                to={'/AddUser/' + p.mobile}
                                 activeClassName="active"
                                 exact="true">
                                 <i class="cui-note icons font-1xl d-block mt-0"></i>
                               </BSNavLink>
-                            </td>
-
-
-                            <td>
-                              <Badge className="pointer1" onClick={() => formthis.statusupdate(p, 3)}><i class="fa fa-trash" aria-hidden="true"></i></Badge>
-
-
                             </td>
 
 
@@ -270,7 +265,7 @@ class VendorList extends Component {
 
                   </tbody>
                 </Table>
-                <ReactPaginate previousLabel={"previous"}
+                {/* <ReactPaginate previousLabel={"previous"}
                   nextLabel={"next"}
                   breakLabel={<a href=""></a>}
                   breakClassName={"break-me"}
@@ -285,7 +280,7 @@ class VendorList extends Component {
                   pageLinkClassName={"page-link"}
                   previousLinkClassName={"page-link"}
                   nextLinkClassName={"page-link"}
-                />
+                /> */}
               </CardBody>
             </Card>
           </Col>
