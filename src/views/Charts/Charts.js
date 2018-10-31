@@ -504,7 +504,7 @@ class Charts extends Component {
                 <div className="chart-wrapper">
               <h4 color = 'red'><strong>{this.state.allUser}</strong></h4>
               <br/>
-              <h4><strong><a href =  '/#/theme/typography'> All users</a> </strong></h4>
+              <h4><strong><a href =  '/#/theme/privacypolicy'> Payment Details</a> </strong></h4>
               </div>
               </CardBody>
               <div className="chart-wrapper mx-3" style={{ height: '70px' }}>

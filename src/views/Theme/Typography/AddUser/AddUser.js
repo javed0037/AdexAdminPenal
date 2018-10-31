@@ -22,7 +22,8 @@ class AddUser extends Component {
       products: [],
       offset: 0,
       pageno: 1,
-      pageCount: 0
+      pageCount: 0,
+      owner_of_transaction : ''
     };
 
   }
@@ -43,7 +44,8 @@ class AddUser extends Component {
     );
   };
 
-// var parameter = this.props.match.params.ids;
+
+ 
   listTransaction = () => {
     var object = {
       method: 'POST',
@@ -52,12 +54,11 @@ class AddUser extends Component {
         //'Authorization': 'Bearer ' + sessionStorage.getItem('jwt') + ''
       },
       body: JSON.stringify({
-        "mobile" :"p.mobile",
+        "mobile" : this.props.match.params.mobile
          
       })
     }
-    // var parameter = this.props.match.params.ids;
-    
+    console.log("ther are the params7777..........",this.props)    
     // var user_ids = (parameter) ? parameter : 0;
     // var pageno = this.state.pageno;
     var api_url = `${config.API_URL}`;
@@ -67,12 +68,15 @@ class AddUser extends Component {
     fetch(api_url+apiUrl, object)
       .then(res => res.json())
       .then(json => {
-        if (json["data"].length > 0) {
-          var total_count = json["totalElements"];
+        console.log("there are the transaction result....................",json)
+        if (json.data.transaction_list.length > 0) {
+         // var total_count = json["totalElements"];
           this.setState({
-            products: json["data"],
-           // pageCount: Math.ceil(total_count / PAGELIMIT)
+            products: json.data.transaction_list,
+            owner_of_transaction :json.data.owner_of_transaction
           });
+
+
         }
         else {
           this.setState({
@@ -151,7 +155,7 @@ class AddUser extends Component {
     const formthis = this;
     return (
       <div className="animated fadeIn">
-      <h4>CHAT WALLPAPER LIST</h4>
+      <h4>Transnaction history</h4>
         <Row>
           <Col xs="12" lg="12">
             <Card>
@@ -161,11 +165,11 @@ class AddUser extends Component {
                 <Table responsive striped>
                   <thead>
                     <tr>
-                      <th>S.No</th>
-                      <th>Color Code</th>
-                      <th>Color Box</th>
-                      <th>Edit</th>
-                      <th>Delete</th>
+                      
+                      <th>transaction_date</th>
+                      <th>is_withdraw</th>
+                      <th>comment</th>
+                      <th>amount</th>
 
                     </tr>
                   </thead>
@@ -173,42 +177,12 @@ class AddUser extends Component {
                     {
                       this.state.products.map(function (p, index, ) {
                         return (
-                          <tr>
-                            <td>{p.id}</td>
-                            
-                          
-                            <td>
-                             
-                             <Badge className="pointer" onClick={() => formthis.statusupdate(p)} color={(p.status == 1) ? "success" : "secondary"}>{(p.status == 1) ? "Active" : "Inactive"}</Badge>
-
-                           </td>
-                            <td>
-                              <BSNavLink
-                                className="text-uppercase"
-                                tag={NavLink}
-                                to={'/vendor/VendorEmployeeList/' + p.userid}
-                                activeClassName="active"
-                                exact="true">
-                                <i class="icon-eye icons font-1xl d-block mt-0"></i>
-                              </BSNavLink>
-                            </td>
-                            <td>
-                              <BSNavLink
-                                className="text-uppercase"
-                                tag={NavLink}
-                                to={'/vendor/updatevendor/' + p.userid}
-                                activeClassName="active"
-                                exact="true">
-                                <i class="cui-note icons font-1xl d-block mt-0"></i>
-                              </BSNavLink>
-                            </td>
-
-
-                            <td>
-                              <Badge className="pointer1" onClick={() => formthis.statusupdate(p, 3)}><i class="fa fa-trash" aria-hidden="true"></i></Badge>
-
-
-                            </td>
+                          <tr>  
+                           
+                            <td>{p.transaction_date}</td>
+                            <td>{(p.is_withdraw == false)?'false':'True'}</td>
+                            <td>{p.comment}</td>
+                            <td>{p.amount}</td>
 
 
                           </tr>

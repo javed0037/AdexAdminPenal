@@ -23,17 +23,18 @@ export default {
       url: '/theme/typography',
       icon: 'icon-star',
     },
+    {
+      name: 'PAYMENT DETAILS',
+      url: '/theme/privacypolicy',
+      icon: 'icon-star',
+    },
     
     {
       name: 'ABOUT US',
       url: '/notifications/alerts',
       icon: 'icon-star',
     },
-    {
-      name: 'PRIVACY POLICY',
-      url: '/theme/privacypolicy',
-      icon: 'icon-star',
-    },
+   
   
       {
         name: 'TERM&CONDITIONS',
@@ -45,11 +46,11 @@ export default {
         url: '/theme/Support',
         icon: 'icon-star',
       },
-      {
-        name: 'CHAT WALPAPER',
-        url: '/theme/Chatwalpaper',
-        icon: 'icon-star',
-      },
+      // {
+      //   name: 'CHAT WALPAPER',
+      //   url: '/theme/Chatwalpaper',
+      //   icon: 'icon-star',
+      // },
    
     
     // {
